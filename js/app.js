@@ -1,46 +1,78 @@
+// DOM variable references
+var canvas = document.getElementById('shapes');
+var context = canvas.getContext('2d');
+context.translate(0.5, 0.5);
+var canvasSizes = {
+    h: context.canvas.height,
+    w: context.canvas.width
+}
+var centerSizes = {
+    h: 1,
+    w: 1
+}
+
 // function for detecting dom content
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('working ... ');
+    // evaluation of screen size
+    console.log('Height is: ' + canvasSizes.h);
+    console.log('Width is: ' + canvasSizes.w);
 
-    // variable references for canvas and webGL
-    var canvas = document.getElementById('shapes');
-    var webgl = canvas.getContext('webgl');
+    // find and fill center
+    context.fillStyle = "#FF0000";
+    context.fillRect((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2), centerSizes.w, centerSizes.h);
 
-    // detecting if webGl not supported or has experimental on old browser
-    if(!webgl) {
-        console.log('WebGL not supported, falling back on experimental webGL');
-        webgl = canvas.getContext('exoerimental-webgl');
-    }
-    if (!webgl) {
-        alert('Your browser does not support WebGL');
-    }
-
-    // TODO
-    webgl.clearColor(0.75, 0.85, 0.8, 1.0);
-    webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
+    drawLineX();
+    drawLineXInverted();
+    drawLineY();
+    drawLineYInverted();
+    drawLineZ();
+    DrawLineZInverted();
 });
 
-// for point reading
-document.getElementById('point-file').addEventListener('Change', getFile);
-
-function getFile(event) {
-    const input = event.target;
-    if ('files' in input && input.files.length > 0) {
-        placeFileContent(document.getElementById('textarea1'), input.files[0]);
-    }
+function drawLineX(color = "Blue") {
+    context.beginPath();
+    context.moveTo((canvasSizes.w / 2) - (centerSizes.w / 2),0);    // inicio
+    context.lineTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2)); // fin
+    context.strokeStyle = color;
+    context.stroke();
 }
 
-function placeFileContent(target, file) {
-    readFileContent(file).then(content => {
-        target.value = content;
-    }).catch(err => console.log(err));
+function drawLineXInverted(color = "LightBlue") {
+    context.beginPath();
+    context.moveTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2));    // inicio
+    context.lineTo((canvasSizes.w / 2) - (centerSizes.w / 2),(canvasSizes.w / 2) - (centerSizes.w / 2)); // fin
+    context.strokeStyle = color;
+    context.stroke();
 }
 
-function readFileContent(file) {
-    const reader = new FileReader();
-    return new Promise((resolve, reject) => {
-        reader.onload = event => resolve(event.target.result);
-        reader.onerror = error => reject(error);
-        reader.readAsText(file);
-    });
+function drawLineY(color = "Red") {
+    context.beginPath();
+    context.moveTo(0,(canvasSizes.w / 2) - (centerSizes.w / 2));    // inicio
+    context.lineTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2)); // fin
+    context.strokeStyle = color;
+    context.stroke();
+}
+
+function drawLineYInverted(color = "DarkRed") {
+    context.beginPath();
+    context.moveTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2));    // inicio
+    context.lineTo(canvasSizes.w, 0); // fin
+    context.strokeStyle = color;
+    context.stroke();
+}
+
+function drawLineZ(color = "LawnGreen") {
+    context.beginPath();
+    context.moveTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2));    // inicio
+    context.lineTo(canvasSizes.w, canvasSizes.h); // fin
+    context.strokeStyle = color;
+    context.stroke();
+}
+
+function DrawLineZInverted(color = "Green") {
+    context.beginPath();
+    context.moveTo((canvasSizes.w / 2) - (centerSizes.w / 2), (canvasSizes.h / 2) - (centerSizes.h / 2));    // inicio
+    context.lineTo(0,0); // fin
+    context.strokeStyle = color;
+    context.stroke();
 }
